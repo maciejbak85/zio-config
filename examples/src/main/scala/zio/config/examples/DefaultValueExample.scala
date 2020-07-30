@@ -16,8 +16,7 @@ object DefaultValueExample extends App {
       PgmConfig.unapply
     )
 
-  val pgmConfig = ConfigSource
-    .fromSystemEnv(None, None)
+  val pgmConfig = ConfigSource.fromSystemEnv
     .map(source => conf from source)
     .provideLayer(ZLayer.succeed(Map.empty[String, String]))
 
