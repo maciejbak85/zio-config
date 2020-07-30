@@ -5,7 +5,7 @@ import zio.random.Random
 import zio.test.Assertion._
 import zio.test.environment.TestEnvironment
 import zio.test.{ DefaultRunnableSpec, _ }
-import zio.{ UIO, ZIO }
+import zio.{ UIO, ZIO, ZLayer }
 
 object SystemTest extends DefaultRunnableSpec {
 
@@ -27,7 +27,7 @@ object SystemTest extends DefaultRunnableSpec {
         val keyDelimiter = '_'
 
         val sysEnvLayer =
-          SystemModule.test(Map("SYSTEMPROPERTIESTEST_SIZE" -> "100", "SYSTEMPROPERTIESTEST_DESCRIPTION" -> "ABC"))
+          ZLayer.succeed(Map("SYSTEMPROPERTIESTEST_SIZE" -> "100", "SYSTEMPROPERTIESTEST_DESCRIPTION" -> "ABC"))
         val configEnvLayer = sysEnvLayer >>> Config.fromSystemEnv(SomeConfig.descriptor, Some(keyDelimiter))
         val result =
           ZIO.environment.provideLayer(configEnvLayer).map(_.get)
@@ -39,7 +39,7 @@ object SystemTest extends DefaultRunnableSpec {
 
         //TODO DRY
         val sysEnvLayer =
-          SystemModule.test(Map("SYSTEMPROPERTIESTEST_SIZE" -> "100", "SYSTEMPROPERTIESTEST_DESCRIPTION" -> "ABC"))
+          ZLayer.succeed(Map("SYSTEMPROPERTIESTEST_SIZE" -> "100", "SYSTEMPROPERTIESTEST_DESCRIPTION" -> "ABC"))
         val configEnvLayer = sysEnvLayer >>> Config.fromSystemEnv(SomeConfig.descriptor, Some(keyDelimiter))
         val result =
           ZIO.environment.provideLayer(configEnvLayer).map(_.get)

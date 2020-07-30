@@ -2,6 +2,7 @@ package zio.config.examples
 
 import zio.config._
 import ConfigDescriptor._
+import zio.ZLayer
 
 object MultipleSourcesExample extends App {
 
@@ -14,8 +15,9 @@ object MultipleSourcesExample extends App {
   private val source1 = ConfigSource.fromMap(Map("LDAP" -> "jolap"), "constant")
   private val source2 = runtime.unsafeRun(ConfigSource.fromSystemProperties)
 
-  private val source3 = runtime.unsafeRun(ConfigSource.fromSystemEnv.provideLayer(SystemModule.test()))
-  private val source4 = ConfigSource.fromMap(Map("PORT" -> "1999"), "constant")
+  private val source3 =
+    runtime.unsafeRun(ConfigSource.fromSystemEnv.provideLayer(ZLayer.succeed(Map.empty[String, String])))
+  private val source4 = ConfigSource.fromMap(Map("PORT"   -> "1999"), "constant")
   private val source5 = ConfigSource.fromMap(Map("DB_URL" -> "newyork.com"), "constant")
 
   private val oneValidSource =

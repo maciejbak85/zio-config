@@ -46,4 +46,6 @@ package object config extends KeyConversionFunctions with ConfigStringModule {
       f(a).zipWith(io)((b, bs) => ::(b, bs))
     }
   }
+
+  private[config] type SystemEnvironment = Has[Map[String, String]]
 }

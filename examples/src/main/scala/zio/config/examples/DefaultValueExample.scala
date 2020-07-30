@@ -1,9 +1,10 @@
 package zio.config.examples
 
-import zio.config.{ SystemModule, _ }
+import zio.config._
 import ConfigDescriptor._
 import ConfigDocs._
 import ConfigSource._
+import zio.ZLayer
 
 object DefaultValueExample extends App {
   final case class PgmConfig(a: String, b: Either[String, Int])
@@ -18,7 +19,7 @@ object DefaultValueExample extends App {
   val pgmConfig = ConfigSource
     .fromSystemEnv(None, None)
     .map(source => conf from source)
-    .provideLayer(SystemModule.test(Map.empty))
+    .provideLayer(ZLayer.succeed(Map.empty[String, String]))
 
   val runtime = zio.Runtime.default
 
